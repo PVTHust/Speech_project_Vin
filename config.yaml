@@ -37,7 +37,7 @@ ASTModel:
   input_fdim: 128  # Number of frequency bins
   input_tdim: 256  # Number of time frames
   imagenet_pretrain: true  # Use ImageNet pretrained model
-  audioset_pretrain: true  # Use AudioSet pretrained model
+  audioset_pretrain: false  # Use AudioSet pretrained model
   model_size: 'base384'  # Model size for ASTModel
 
 # Visual model parameters

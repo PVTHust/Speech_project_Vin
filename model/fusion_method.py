@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import yaml
 
 # Load configuration from YAML file
-with open('config.yaml', 'r') as file:
+with open('./config.yaml', 'r') as file:
     config = yaml.safe_load(file)
 
 class SumFusion(nn.Module):

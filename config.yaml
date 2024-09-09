@@ -24,7 +24,6 @@ weight_audio: '/kaggle/input/weight-asr/audioset_10_10_0.4593.pth'
 save_path: '/kaggle/working/weights/model.pth'  # Model save path
 train_csv: '/kaggle/working/Speech_project_Vin/data/CREMAD/train.csv'  # Path to train.csv
 test_csv: '/kaggle/working/Speech_project_Vin/data/CREMAD/test.csv'  # Path to test.csv
-
 # PatchEmbed parameters
 img_size: 224  # Image size for PatchEmbed
 patch_size: 16  # Patch size for PatchEmbed
@@ -32,13 +31,14 @@ in_chans: 3  # Input channels for PatchEmbed
 embed_dim: 768  # Embedding dimension for PatchEmbed
 
 # ASTModel parameters
-fstride: 10  # Frequency stride
-tstride: 10  # Time stride
-input_fdim: 128  # Number of frequency bins
-input_tdim: 1024  # Number of time frames
-imagenet_pretrain: true  # Use ImageNet pretrained model
-audioset_pretrain: true  # Use AudioSet pretrained model
-model_size: 'base384'  # Model size for ASTModel
+ASTModel:
+  fstride: 10  # Frequency stride
+  tstride: 10  # Time stride
+  input_fdim: 128  # Number of frequency bins
+  input_tdim: 256  # Number of time frames
+  imagenet_pretrain: true  # Use ImageNet pretrained model
+  audioset_pretrain: true  # Use AudioSet pretrained model
+  model_size: 'base384'  # Model size for ASTModel
 
 # Visual model parameters
 visual_model:

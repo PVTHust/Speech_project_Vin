@@ -28,3 +28,10 @@ img_size: 224  # Image size for PatchEmbed
 patch_size: 16  # Patch size for PatchEmbed
 in_chans: 3  # Input channels for PatchEmbed
 embed_dim: 768  # Embedding dimension for PatchEmbed
+fstride: 10  # Frequency stride
+tstride: 10  # Time stride
+input_fdim: 128  # Number of frequency bins
+input_tdim: 1024  # Number of time frames
+imagenet_pretrain: true  # Use ImageNet pretrained model
+audioset_pretrain: true  # Use AudioSet pretrained model
+model_size: 'base384'  # Model size for ASTModel

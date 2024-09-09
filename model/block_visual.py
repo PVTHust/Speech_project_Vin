@@ -259,12 +259,3 @@ class AttentionBlock(nn.Module):
         out = self.relu(out)
 
         return out
-
-# Define other layers and blocks similarly...
-
-if __name__ == '__main__':
-    # Example to test the visual model with random data
-    test_input = torch.rand([8, 3, 224, 224])  # Random input tensor of shape (batch_size, channels, height, width)
-    cbam = CBAM(gate_channels=64)
-    output = cbam(test_input)
-    print(output.shape)  # Output tensor shape

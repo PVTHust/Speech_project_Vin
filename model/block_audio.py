@@ -8,7 +8,7 @@ from timm.models.layers import to_2tuple, trunc_normal_
 import yaml
 
 # Load the configuration from the YAML file
-with open('config.yaml', 'r') as file:
+with open('/kaggle/working/Speech_project_Vin/config.yaml', 'r') as file:
     config = yaml.safe_load(file)
 
 # Override the timm package to relax the input shape constraint.

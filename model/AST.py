@@ -9,7 +9,7 @@ from model.block_audio import PatchEmbed
 import yaml
 
 # Load the configuration from the YAML file
-with open('config.yaml', 'r') as file:
+with open('/kaggle/working/Speech_project_Vin/config.yaml', 'r') as file:
     config = yaml.safe_load(file)
 
 class ASTModel(nn.Module):

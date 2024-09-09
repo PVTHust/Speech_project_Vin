@@ -43,3 +43,10 @@ visual_model:
 manet:
   layers: [2, 2, 2, 2]  # Layers for MANet
   num_classes: 12666  # Number of output classes for MANet
+# Fusion method parameters
+fusion:
+  type: 'concat'  # Type of fusion: 'sum', 'concat', 'film', or 'gated'
+  input_dim: 512  # Input dimension
+  output_dim: 100  # Output dimension for the fusion
+  film_x_film: true  # Option for FiLM fusion
+  gated_x_gate: true  # Option for Gated Fusion

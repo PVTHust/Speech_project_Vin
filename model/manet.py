@@ -4,7 +4,7 @@ from model.block_visual import BasicConv, Flatten, ChannelGate, ChannelPool, Spa
 import yaml
 
 # Load configuration from YAML file
-with open('config.yaml', 'r') as file:
+with open('/kaggle/working/Speech_project_Vin/config.yaml', 'r') as file:
     config = yaml.safe_load(file)
 
 class MANet(nn.Module):

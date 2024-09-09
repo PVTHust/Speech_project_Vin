@@ -111,13 +111,3 @@ class ASTModel(nn.Module):
         x = self.v.norm(x)
         x = (x[:, 0] + x[:, 1]) / 2
         return self.mlp_head(x)
-
-if __name__ == '__main__':
-    # Load config from YAML file
-    with open('/kaggle/working/Speech_project_Vin/config.yaml', 'r') as file:
-        config = yaml.safe_load(file)
-
-    ast_mdl = ASTModel(config)
-    test_input = torch.rand([16, 1, config['ASTModel']['input_tdim'], config['ASTModel']['input_fdim']])
-    test_output = ast_mdl(test_input)
-    print(test_output.shape)

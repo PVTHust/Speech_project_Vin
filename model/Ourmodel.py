@@ -28,7 +28,7 @@ class AVClassifier(nn.Module):
             raise ValueError("Invalid fusion method in config")
 
         # Initialize audio model (AST)
-        self.audio_net = ASTModel(config, label_dim=64)
+        self.audio_net = ASTModel(config)
 
         # Load visual model (MANet)
         visual_sd = torch.load(config['weight_visual'], map_location='cuda')

@@ -78,28 +78,3 @@ def eval(config, model, device, dataloader, test=False):
 
     return _loss / len(dataloader), wf1
 
-# Initialize dataset and dataloaders
-train_dataset = CramedDataset(config, train=True)  # Assuming train=True for training data
-train_dataloader = DataLoader(train_dataset, batch_size=config['batch_size'], shuffle=True, pin_memory=True)
-
-test_dataset = CramedDataset(config, train=False)  # Assuming train=False for test data
-test_dataloader = DataLoader(test_dataset, batch_size=config['batch_size'], shuffle=False, pin_memory=True)
-
-# Initialize model, optimizer, and scheduler
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
-model = torch.nn.DataParallel(AVClassifier(config), device_ids=[0, 1])
-model.to(device)
-
-optimizer = optim.SGD(model.parameters(), lr=config['training']['learning_rate'], momentum=0.9, weight_decay=1e-4)
-scheduler = optim.lr_scheduler.StepLR(optimizer, config['training']['lr_decay_step'], config['training']['lr_decay_ratio'])
-
-# Train the model
-num_epochs = config['training']['epoch']
-save_path = config['training']['save_path']
-
-for epoch in range(num_epochs):
-    train_loss = train_epoch(config, epoch, model, device, train_dataloader, optimizer, scheduler, save_path=save_path)
-    print(f"Train Loss for Epoch {epoch}: {train_loss:.4f}")
-
-    val_loss, wf1 = eval(config, model, device, test_dataloader, test=True)
-    print(f"Validation Loss: {val_loss:.4f}, Weighted F1 Score: {wf1:.4f}")

@@ -6,7 +6,7 @@ from model.AST import ASTModel
 from model.manet import manet
 
 # Load configuration from YAML file
-with open('config.yaml', 'r') as file:
+with open('/kaggle/working/Speech_project_Vin/config.yaml', 'r') as file:
     config = yaml.safe_load(file)
 
 class AVClassifier(nn.Module):

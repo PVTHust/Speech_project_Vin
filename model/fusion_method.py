@@ -104,12 +104,3 @@ def create_fusion_model():
     else:
         raise ValueError("Invalid fusion type in config")
 
-if __name__ == '__main__':
-    fusion_model = create_fusion_model()
-
-    # Example forward pass with random data
-    x = torch.rand(8, 512)  # Random input tensor x
-    y = torch.rand(8, 512)  # Random input tensor y
-    x_out, y_out, output = fusion_model(x, y)
-
-    print(output.shape)  # Output tensor shape

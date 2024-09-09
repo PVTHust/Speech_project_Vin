@@ -71,8 +71,8 @@ class ASTModel(nn.Module):
             num_patches = f_dim * t_dim
 
             if config['ASTModel']['verbose']:
-                print(f'Frequency stride={config['ASTModel']['fstride']}, Time stride={config['ASTModel']['tstride']}')
-                print(f'Number of patches={num_patches}')
+                print(f"Frequency stride={config['ASTModel']['fstride']}, Time stride={config['ASTModel']['tstride']}")
+                print(f"Number of patches={num_patches}")
 
             new_pos_embed = self.resize_positional_embedding(self.v.pos_embed[:, 2:, :].detach(), f_dim, t_dim)
             self.v.pos_embed = nn.Parameter(torch.cat([self.v.pos_embed[:, :2, :].detach(), new_pos_embed], dim=1))

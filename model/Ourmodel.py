@@ -48,15 +48,3 @@ class AVClassifier(nn.Module):
         a, v, out = self.fusion_module(a, v)
 
         return a, v, out
-
-
-if __name__ == '__main__':
-    # Example of how to initialize and run AVClassifier
-    av_classifier = AVClassifier(config)
-
-    # Example forward pass with random data
-    audio_input = torch.rand(8, 1, 256, 128)  # Random audio input
-    visual_input = torch.rand(8, 3, 224, 224)  # Random visual input
-
-    audio_out, visual_out, fusion_out = av_classifier(audio_input, visual_input)
-    print(fusion_out.shape)  # Output shape from the fusion

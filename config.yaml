@@ -22,8 +22,8 @@ epoch: 100  # Number of training epochs
 weight_visual: '/kaggle/input/weight-cremad/weight.pth'
 weight_audio: '/kaggle/input/weight-asr/audioset_10_10_0.4593.pth'
 save_path: '/kaggle/working/weights/model.pth'  # Model save path
-train_csv: '/kaggle/input/Speech_project_Vin/data/CREMAD/train.csv'  # Path to train.csv
-test_csv: '/kaggle/input/Speech_project_Vin/data/CREMAD/test.csv'  # Path to test.csv
+train_csv: '/kaggle/working/Speech_project_Vin/data/CREMAD/train.csv'  # Path to train.csv
+test_csv: '/kaggle/working/Speech_project_Vin/data/CREMAD/test.csv'  # Path to test.csv
 
 # PatchEmbed parameters
 img_size: 224  # Image size for PatchEmbed

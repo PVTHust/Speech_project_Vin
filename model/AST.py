@@ -61,7 +61,7 @@ class ASTModel(nn.Module):
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
             sdi = torch.load(config['weight_audio'], map_location=device)
             audio_model = ASTModel(config)
-            audio_model = torch.nn.DataParallel(audio_model, device_ids=[0, 1])
+            audio_model = torch.nn.DataParallel(audio_model)
             audio_model.load_state_dict(sdi, strict=False)
             self.v = audio_model.module.v
             self.original_embedding_dim = self.v.pos_embed.shape[2]

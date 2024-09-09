@@ -11,16 +11,12 @@ import yaml
 with open('/kaggle/working/Speech_project_Vin/config.yaml', 'r') as file:
     config = yaml.safe_load(file)
 
-# Override the timm package to relax the input shape constraint.
 class PatchEmbed(nn.Module):
-    def __init__(self, config):
+    def __init__(self, img_size=224, patch_size=16, in_chans=3, embed_dim=768):
         super().__init__()
-        
-        img_size = to_2tuple(config['img_size'])
-        patch_size = to_2tuple(config['patch_size'])
-        in_chans = config['in_chans']
-        embed_dim = config['embed_dim']
-        
+
+        img_size = to_2tuple(img_size)
+        patch_size = to_2tuple(patch_size)
         num_patches = (img_size[1] // patch_size[1]) * (img_size[0] // patch_size[0])
         self.img_size = img_size
         self.patch_size = patch_size

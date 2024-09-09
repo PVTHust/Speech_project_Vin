@@ -56,7 +56,7 @@ fusion:
   input_dim: 1088  # Input dimension for fusion
   output_dim: 7  # Output dimension for the fusion
   film_x_film: false
-  
+  gated_x_gate: false
 # Training parameters
 training:
   learning_rate: 0.0002  # Learning rate for the optimizer

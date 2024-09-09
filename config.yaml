@@ -3,8 +3,8 @@ modulation: 'OGM_GE'
 fusion_method: 'concat'  # Can be 'sum', 'concat', 'film', or 'gated'
 fps: 1
 num_classes: 7
-audio_path: './cremad-1/cremad/AudioWAV/'  # fix link dataset
-visual_path: './cremad-1/cremad/'  # fix link dataset
+audio_path: '/kaggle/input/cremad-1/cremad/AudioWAV/'  # fix link dataset
+visual_path: '/kaggle/input/cremad-1/cremad/'  # fix link dataset
 batch_size: 16
 epochs: 30
 optimizer: 'sgd'
@@ -12,18 +12,18 @@ learning_rate: 0.0002
 lr_decay_step: 70
 lr_decay_ratio: 0.1
 momentum: 0.9
-ckpt_path: './ckpt'
+ckpt_path: '/kaggle/working/ckpt'
 train: true
 use_tensorboard: false
 tensorboard_path: null
 random_seed: 0
 input_tdim: 256
 epoch: 100  # Number of training epochs
-weight_visual: './weight-cremad/weight.pth'
-weight_audio: './weight-asr/audioset_10_10_0.4593.pth'
-save_path: './weight.pth'  # Model save path
-train_csv: './data/CREMAD/train.csv'  # Path to train.csv
-test_csv: './data/CREMAD/test.csv'  # Path to test.csv
+weight_visual: '/kaggle/input/weight-cremad/weight.pth'
+weight_audio: '/kaggle/input/weight-asr/audioset_10_10_0.4593.pth'
+save_path: '/kaggle/working/weights/model.pth'  # Model save path
+train_csv: '/kaggle/input/Speech_project_Vin/data/CREMAD/train.csv'  # Path to train.csv
+test_csv: '/kaggle/input/Speech_project_Vin/data/CREMAD/test.csv'  # Path to test.csv
 
 # PatchEmbed parameters
 img_size: 224  # Image size for PatchEmbed
@@ -62,4 +62,4 @@ training:
   lr_decay_step: 70  # Step size for learning rate decay
   lr_decay_ratio: 0.1  # Decay ratio for learning rate
   epoch: 100  # Number of epochs for training
-  save_path: './weights/model.pth'  # Path to save the model
+  save_path: '/kaggle/working/weights/model.pth'  # Path to save the model

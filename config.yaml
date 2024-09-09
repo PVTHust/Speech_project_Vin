@@ -22,3 +22,5 @@ epoch: 100
 weight_visual: './weight-cremad/weight.pth'
 weight_audio: './weight-asr/audioset_10_10_0.4593.pth'
 save_path: './weight.pth'  # fix link save weight
+train_csv: './data/CREMAD/train.csv'  # Path to train.csv
+test_csv: './data/CREMAD/test.csv'  # Path to test.csv

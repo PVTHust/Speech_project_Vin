@@ -23,17 +23,17 @@ class ASTModel(nn.Module):
 
         if verbose:
             print('---------------AST Model Summary---------------')
-            print('ImageNet pretraining: {:s}, AudioSet pretraining: {:s}'.format(str(config['imagenet_pretrain']), str(config['audioset_pretrain'])))
+            print('ImageNet pretraining: {:s}, AudioSet pretraining: {:s}'.format(str(config['ASTModel']['imagenet_pretrain']), str(config['ASTModel']['audioset_pretrain'])))
 
         timm.models.vision_transformer.PatchEmbed = PatchEmbed
 
-        fstride = config['fstride']
-        tstride = config['tstride']
-        input_fdim = config['input_fdim']
-        input_tdim = config['input_tdim']
-        imagenet_pretrain = config['imagenet_pretrain']
-        audioset_pretrain = config['audioset_pretrain']
-        model_size = config['model_size']
+        fstride = config['ASTModel']['fstride']
+        tstride = config['ASTModel']['tstride']
+        input_fdim = config['ASTModel']['input_fdim']
+        input_tdim = config['ASTModel']['input_tdim']
+        imagenet_pretrain = config['ASTModel']['imagenet_pretrain']
+        audioset_pretrain = config['ASTModel']['audioset_pretrain']
+        model_size = config['ASTModel']['model_size']
 
         if not audioset_pretrain:
             if model_size == 'tiny224':

@@ -18,10 +18,10 @@ use_tensorboard: false
 tensorboard_path: null
 random_seed: 0
 input_tdim: 256
-epoch: 100
+epoch: 100  # Number of training epochs
 weight_visual: './weight-cremad/weight.pth'
 weight_audio: './weight-asr/audioset_10_10_0.4593.pth'
-save_path: './weight.pth'  # fix link save weight
+save_path: './weight.pth'  # Model save path
 train_csv: './data/CREMAD/train.csv'  # Path to train.csv
 test_csv: './data/CREMAD/test.csv'  # Path to test.csv
 
@@ -55,3 +55,11 @@ fusion:
   type: 'concat'  # Type of fusion: 'sum', 'concat', 'film', or 'gated'
   input_dim: 1088  # Input dimension for fusion
   output_dim: 7  # Output dimension for the fusion
+
+# Training parameters
+training:
+  learning_rate: 0.0002  # Learning rate for the optimizer
+  lr_decay_step: 70  # Step size for learning rate decay
+  lr_decay_ratio: 0.1  # Decay ratio for learning rate
+  epoch: 100  # Number of epochs for training
+  save_path: './weights/model.pth'  # Path to save the model

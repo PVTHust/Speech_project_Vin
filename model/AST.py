@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from torch.cuda.amp import autocast
+from torch.amp import autocast  # Sử dụng torch.amp thay vì torch.cuda.amp
 import os
 import wget
 import timm
@@ -100,7 +100,7 @@ class ASTModel(nn.Module):
         t_dim = test_out.shape[3]
         return f_dim, t_dim
 
-    @autocast()
+    @autocast('cuda')
     def forward(self, x):
         x = x.transpose(2, 3)  # Expected input shape: (batch_size, time_frame_num, frequency_bins)
 

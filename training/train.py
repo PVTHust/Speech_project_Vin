@@ -1,10 +1,16 @@
 import torch
 import torch.nn as nn
 from tqdm import tqdm
-import torch
 from sklearn.metrics import f1_score, classification_report
+import yaml
+from torch import optim
+from model.av_classifier import AVClassifier  # Assuming AVClassifier is defined elsewhere
 
-def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, writer=None, save_path=None):
+# Load configuration from YAML file
+with open('config.yaml', 'r') as file:
+    config = yaml.safe_load(file)
+
+def train_epoch(config, epoch, model, device, dataloader, optimizer, scheduler, save_path=None):
     criterion = nn.CrossEntropyLoss()
 
     model.train()
@@ -12,21 +18,21 @@ def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, wr
 
     _loss = 0
 
-    for step, (spec, image, label) in (pbar := tqdm(enumerate(dataloader), desc='Epoch: {}: '.format(epoch))):
+    for step, (spec, image, label) in (pbar := tqdm(enumerate(dataloader), desc=f'Epoch: {epoch}')):
         spec = spec.to(device)
         image = image.to(device)
         label = label.to(device)
 
         optimizer.zero_grad()
 
-        # TODO: make it simpler and easier to extend
+        # Forward pass
         a, v, out = model(spec.unsqueeze(1).float(), image.float())
 
         loss = criterion(out, label)
         loss.backward()
 
         optimizer.step()
-        pbar.set_description('Epoch: {} Loss: {:.4f}'.format(epoch, loss.item()))
+        pbar.set_description(f'Epoch: {epoch} Loss: {loss.item():.4f}')
 
         _loss += loss.item()
 
@@ -39,14 +45,10 @@ def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, wr
 
     return _loss / len(dataloader)
 
-def eval(args, model, device, dataloader, test=False):
 
+def eval(config, model, device, dataloader, test=False):
     softmax = nn.Softmax(dim=1)
-
-    if args.dataset == 'CREMAD':
-        n_classes = 6
-    else:
-        raise NotImplementedError('Incorrect dataset name {}'.format(args.dataset))
+    n_classes = config['num_classes']
 
     with torch.no_grad():
         model.eval()
@@ -54,15 +56,13 @@ def eval(args, model, device, dataloader, test=False):
         _loss = 0
         golds = []
         preds = []
-        for step, (spec, image, label) in enumerate(dataloader):
 
+        for step, (spec, image, label) in enumerate(dataloader):
             spec = spec.to(device)
             image = image.to(device)
             label = label.to(device)
 
-#             a, v, out = model(spec.unsqueeze(1).float(), image.float())
             a, v, out = model(spec.unsqueeze(1).float(), image.float())
-
             loss = criterion(out, label)
             _loss += loss.item()
 
@@ -74,27 +74,26 @@ def eval(args, model, device, dataloader, test=False):
 
         if test:
             print(classification_report(golds, preds))
-            
+
     return _loss / len(dataloader), wf1
 
 
-from torch import optim
+# Initialize model, optimizer, and scheduler
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-model = torch.nn.DataParallel( AVClassifier(args), device_ids=[0,1])
-# model = AVClassifier(args)
+model = torch.nn.DataParallel(AVClassifier(config), device_ids=[0, 1])
 model.to(device)
 
-optimizer = optim.SGD(model.parameters(), lr=args.learning_rate, momentum=0.9, weight_decay=1e-4)
-scheduler = optim.lr_scheduler.StepLR(optimizer, args.lr_decay_step, args.lr_decay_ratio)
+optimizer = optim.SGD(model.parameters(), lr=config['training']['learning_rate'], momentum=0.9, weight_decay=1e-4)
+scheduler = optim.lr_scheduler.StepLR(optimizer, config['training']['lr_decay_step'], config['training']['lr_decay_ratio'])
 
-# Huấn luyện mô hình
-
-num_epochs = args.epoch
-save_path = args.save_path
+# Training loop
+num_epochs = config['training']['epoch']
+save_path = config['training']['save_path']
 
 for epoch in range(num_epochs):
-    train_loss = train_epoch(args, epoch, model, device, train_dataloader, optimizer, scheduler, save_path=save_path)
+    train_loss = train_epoch(config, epoch, model, device, train_dataloader, optimizer, scheduler, save_path=save_path)
 
     print(f"Train Loss for Epoch {epoch}: {train_loss:.4f}")
-    val_loss = eval(args, model, device, test_dataloader, test=True)
+    val_loss, wf1 = eval(config, model, device, test_dataloader, test=True)
+    print(f"Validation Loss: {val_loss:.4f}, Weighted F1 Score: {wf1:.4f}")

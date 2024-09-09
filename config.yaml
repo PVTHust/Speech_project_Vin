@@ -35,3 +35,7 @@ input_tdim: 1024  # Number of time frames
 imagenet_pretrain: true  # Use ImageNet pretrained model
 audioset_pretrain: true  # Use AudioSet pretrained model
 model_size: 'base384'  # Model size for ASTModel
+# Visual model parameters
+visual_model:
+  reduction_ratio: 16  # Reduction ratio for ChannelGate
+  pool_types: ['avg', 'max']  # Pool types used in ChannelGate

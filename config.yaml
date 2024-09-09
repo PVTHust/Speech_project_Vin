@@ -39,3 +39,7 @@ model_size: 'base384'  # Model size for ASTModel
 visual_model:
   reduction_ratio: 16  # Reduction ratio for ChannelGate
   pool_types: ['avg', 'max']  # Pool types used in ChannelGate
+# MANet parameters
+manet:
+  layers: [2, 2, 2, 2]  # Layers for MANet
+  num_classes: 12666  # Number of output classes for MANet

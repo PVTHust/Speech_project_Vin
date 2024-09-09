@@ -80,6 +80,15 @@ class SpatialGate(nn.Module):
         scale = torch.sigmoid(x_out)
         return x * scale
 
+def conv3x3(in_planes, out_planes, stride=1, groups=1, dilation=1):
+    """3x3 convolution with padding"""
+    return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride,
+                     padding=dilation, groups=groups, bias=False, dilation=dilation)
+
+
+def conv1x1(in_planes, out_planes, stride=1):
+    """1x1 convolution"""
+    return nn.Conv2d(in_planes, out_planes, kernel_size=1, stride=stride, bias=False)
 
 class CBAM(nn.Module):
     def __init__(self, gate_channels, reduction_ratio=config['visual_model']['reduction_ratio'], pool_types=config['visual_model']['pool_types']):

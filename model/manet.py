@@ -121,4 +121,4 @@ def manet(**kwargs):
         block_a=AttentionBlock, 
         layers=config['manet']['layers'], 
         num_classes=config['manet']['num_classes'], 
-        **kwargs
+        **kwargs)

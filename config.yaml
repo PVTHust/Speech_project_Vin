@@ -32,7 +32,7 @@ embed_dim: 768  # Embedding dimension for PatchEmbed
 
 # ASTModel parameters
 ASTModel:
-  verbose: true
+  verbose: false
   fstride: 10  # Frequency stride
   tstride: 10  # Time stride
   input_fdim: 128  # Number of frequency bins

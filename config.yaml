@@ -1,6 +1,6 @@
 dataset: 'CREMAD'
 modulation: 'OGM_GE'
-fusion_method: 'concat'
+fusion_method: 'concat'  # Can be 'sum', 'concat', 'film', or 'gated'
 fps: 1
 num_classes: 7
 audio_path: './cremad-1/cremad/AudioWAV/'  # fix link dataset
@@ -24,10 +24,14 @@ weight_audio: './weight-asr/audioset_10_10_0.4593.pth'
 save_path: './weight.pth'  # fix link save weight
 train_csv: './data/CREMAD/train.csv'  # Path to train.csv
 test_csv: './data/CREMAD/test.csv'  # Path to test.csv
+
+# PatchEmbed parameters
 img_size: 224  # Image size for PatchEmbed
 patch_size: 16  # Patch size for PatchEmbed
 in_chans: 3  # Input channels for PatchEmbed
 embed_dim: 768  # Embedding dimension for PatchEmbed
+
+# ASTModel parameters
 fstride: 10  # Frequency stride
 tstride: 10  # Time stride
 input_fdim: 128  # Number of frequency bins
@@ -35,18 +39,19 @@ input_tdim: 1024  # Number of time frames
 imagenet_pretrain: true  # Use ImageNet pretrained model
 audioset_pretrain: true  # Use AudioSet pretrained model
 model_size: 'base384'  # Model size for ASTModel
+
 # Visual model parameters
 visual_model:
   reduction_ratio: 16  # Reduction ratio for ChannelGate
   pool_types: ['avg', 'max']  # Pool types used in ChannelGate
+
 # MANet parameters
 manet:
   layers: [2, 2, 2, 2]  # Layers for MANet
   num_classes: 12666  # Number of output classes for MANet
+
 # Fusion method parameters
 fusion:
   type: 'concat'  # Type of fusion: 'sum', 'concat', 'film', or 'gated'
-  input_dim: 512  # Input dimension
-  output_dim: 100  # Output dimension for the fusion
-  film_x_film: true  # Option for FiLM fusion
-  gated_x_gate: true  # Option for Gated Fusion
+  input_dim: 1088  # Input dimension for fusion
+  output_dim: 7  # Output dimension for the fusion

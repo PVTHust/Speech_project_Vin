@@ -24,3 +24,7 @@ weight_audio: './weight-asr/audioset_10_10_0.4593.pth'
 save_path: './weight.pth'  # fix link save weight
 train_csv: './data/CREMAD/train.csv'  # Path to train.csv
 test_csv: './data/CREMAD/test.csv'  # Path to test.csv
+img_size: 224  # Image size for PatchEmbed
+patch_size: 16  # Patch size for PatchEmbed
+in_chans: 3  # Input channels for PatchEmbed
+embed_dim: 768  # Embedding dimension for PatchEmbed

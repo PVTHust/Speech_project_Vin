@@ -40,8 +40,8 @@ class ASTModel(nn.Module):
             self.v.patch_embed.num_patches = num_patches
 
             if config['ASTModel']['verbose']:
-                print(f'Frequency stride={config['ASTModel']['fstride']}, Time stride={config['ASTModel']['tstride']}')
-                print(f'Number of patches={num_patches}')
+                print(f"Frequency stride={config['ASTModel']['fstride']}, Time stride={config['ASTModel']['tstride']}")
+                print(f"Number of patches={num_patches}")
 
             new_proj = torch.nn.Conv2d(1, self.original_embedding_dim, kernel_size=(16, 16), stride=(config['ASTModel']['fstride'], config['ASTModel']['tstride']))
             if config['ASTModel']['imagenet_pretrain']:

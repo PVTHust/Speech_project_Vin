@@ -1,6 +1,12 @@
 import torch
 import torch.nn as nn
 from model.block_visual import BasicConv, Flatten, ChannelGate, ChannelPool, SpatialGate, CBAM, conv3x3, conv1x1, BasicBlock, MulScaleBlock, AttentionBlock
+import yaml
+
+# Load configuration from YAML file
+with open('config.yaml', 'r') as file:
+    config = yaml.safe_load(file)
+
 class MANet(nn.Module):
 
     def __init__(self, block_b, block_m, block_a, layers, num_classes=12666):
@@ -109,4 +115,10 @@ class MANet(nn.Module):
 
 
 def manet(**kwargs):
-    return MANet(block_b=BasicBlock, block_m=MulScaleBlock, block_a=AttentionBlock, layers=[2, 2, 2, 2], **kwargs)
+    return MANet(
+        block_b=BasicBlock, 
+        block_m=MulScaleBlock, 
+        block_a=AttentionBlock, 
+        layers=config['manet']['layers'], 
+        num_classes=config['manet']['num_classes'], 
+        **kwargs

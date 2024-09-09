@@ -1,12 +1,14 @@
-#@title Fusion
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torch
-import numpy as np
+import yaml
+
+# Load configuration from YAML file
+with open('config.yaml', 'r') as file:
+    config = yaml.safe_load(file)
 
 class SumFusion(nn.Module):
-    def __init__(self, input_dim=512, output_dim=100):
+    def __init__(self, input_dim=config['fusion']['input_dim'], output_dim=config['fusion']['output_dim']):
         super(SumFusion, self).__init__()
         self.fc_x = nn.Linear(input_dim, output_dim)
         self.fc_y = nn.Linear(input_dim, output_dim)
@@ -17,7 +19,7 @@ class SumFusion(nn.Module):
 
 
 class ConcatFusion(nn.Module):
-    def __init__(self, input_dim=1024, output_dim=100):
+    def __init__(self, input_dim=config['fusion']['input_dim'] * 2, output_dim=config['fusion']['output_dim']):
         super(ConcatFusion, self).__init__()
         self.fc_out = nn.Linear(input_dim, output_dim)
 
@@ -33,7 +35,7 @@ class FiLM(nn.Module):
     https://arxiv.org/pdf/1709.07871.pdf.
     """
 
-    def __init__(self, input_dim=512, dim=512, output_dim=100, x_film=True):
+    def __init__(self, input_dim=config['fusion']['input_dim'], dim=config['fusion']['input_dim'], output_dim=config['fusion']['output_dim'], x_film=config['fusion']['film_x_film']):
         super(FiLM, self).__init__()
 
         self.dim = input_dim
@@ -43,7 +45,6 @@ class FiLM(nn.Module):
         self.x_film = x_film
 
     def forward(self, x, y):
-
         if self.x_film:
             film = x
             to_be_film = y
@@ -52,7 +53,6 @@ class FiLM(nn.Module):
             to_be_film = x
 
         gamma, beta = torch.split(self.fc(film), self.dim, 1)
-
         output = gamma * to_be_film + beta
         output = self.fc_out(output)
 
@@ -65,7 +65,7 @@ class GatedFusion(nn.Module):
     https://arxiv.org/pdf/1802.02892.pdf.
     """
 
-    def __init__(self, input_dim=512, dim=512, output_dim=100, x_gate=True):
+    def __init__(self, input_dim=config['fusion']['input_dim'], dim=config['fusion']['input_dim'], output_dim=config['fusion']['output_dim'], x_gate=config['fusion']['gated_x_gate']):
         super(GatedFusion, self).__init__()
 
         self.fc_x = nn.Linear(input_dim, dim)
@@ -88,3 +88,28 @@ class GatedFusion(nn.Module):
             output = self.fc_out(torch.mul(out_x, gate))
 
         return out_x, out_y, output
+
+# You can now select the fusion method from config['fusion']['type']
+def create_fusion_model():
+    fusion_type = config['fusion']['type']
+
+    if fusion_type == 'sum':
+        return SumFusion()
+    elif fusion_type == 'concat':
+        return ConcatFusion()
+    elif fusion_type == 'film':
+        return FiLM()
+    elif fusion_type == 'gated':
+        return GatedFusion()
+    else:
+        raise ValueError("Invalid fusion type in config")
+
+if __name__ == '__main__':
+    fusion_model = create_fusion_model()
+
+    # Example forward pass with random data
+    x = torch.rand(8, 512)  # Random input tensor x
+    y = torch.rand(8, 512)  # Random input tensor y
+    x_out, y_out, output = fusion_model(x, y)
+
+    print(output.shape)  # Output tensor shape

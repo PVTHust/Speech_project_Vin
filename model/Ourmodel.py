@@ -3,7 +3,7 @@ import torch.nn as nn
 import yaml
 from model.fusion_method import ConcatFusion, SumFusion, FiLM, GatedFusion
 from model.AST import ASTModel
-from model.manet import manet
+from model.manet import manet, RecorderMeter
 
 # Load configuration from YAML file
 with open('/kaggle/working/Speech_project_Vin/config.yaml', 'r') as file:

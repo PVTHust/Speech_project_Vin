@@ -64,4 +64,4 @@ training:
   lr_decay_step: 70  # Step size for learning rate decay
   lr_decay_ratio: 0.1  # Decay ratio for learning rate
   epoch: 100  # Number of epochs for training
-  save_path: '/kaggle/working/weights/model.pth'  # Path to save the model
+  save_path: '/kaggle/working/model.pth'  # Path to save the model

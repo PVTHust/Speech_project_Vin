@@ -32,7 +32,7 @@ class AVClassifier(nn.Module):
 
         # Load visual model (MANet)
         visual_sd = torch.load(config['weight_visual'], map_location='cuda')
-        visual_model = manet(num_classes=n_classes)
+        visual_model = manet(num_classes=7)
         visual_model.load_state_dict(visual_sd, strict=False)
         self.visual_net = visual_model
 

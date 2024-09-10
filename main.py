@@ -1,13 +1,13 @@
 import argparse
 import torch
 
-def get_args():
+def get_args(args=None):
     parser = argparse.ArgumentParser(description="CREMAD Speech Project")
 
     # Dataset and paths
     parser.add_argument('--dataset', type=str, default='CREMAD')
     parser.add_argument('--modulation', type=str, default='OGM_GE')
-    parser.add_argument('--fusion_method', type=str, choices=['sum', 'concat', 'film', 'gated'], default='concat')
+    parser.add_argument('--fusion_type', type=str, default='concat', choices=['sum', 'concat', 'film', 'gated'])
     parser.add_argument('--fps', type=int, default=1)
     parser.add_argument('--num_classes', type=int, default=7)
     parser.add_argument('--audio_path', type=str, default='/kaggle/input/cremad-1/cremad/AudioWAV/')
@@ -66,7 +66,6 @@ def get_args():
     parser.add_argument('--manet_num_classes', type=int, default=12666)
     
     # Fusion method parameters
-    parser.add_argument('--fusion_type', type=str, choices=['sum', 'concat', 'film', 'gated'], default='concat')
     parser.add_argument('--fusion_input_dim', type=int, default=1088)
     parser.add_argument('--fusion_output_dim', type=int, default=7)
     parser.add_argument('--film_x_film', type=bool, default=False)
@@ -79,7 +78,12 @@ def get_args():
     parser.add_argument('--training_epoch', type=int, default=100)
     parser.add_argument('--training_save_path', type=str, default='/kaggle/working/model.pth')
 
-    args = parser.parse_args()
+    if args is None:
+        args = parser.parse_args()
+    else:
+        args = parser.parse_args(args)
+    
+    return args
 
 
     return args
@@ -88,3 +92,5 @@ def get_args():
 if __name__ == "__main__":
     args = get_args()
     print(args.device)
+    print(args.fusion_type)
+    print('done')

@@ -1,21 +1,15 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import os
-import sys
 
 
-# Add the parent directory to sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from main import get_args
 
-args = get_args()
 
 class SumFusion(nn.Module):
-    def __init__(self, input_dim=args.fusion_input_dim, output_dim=args.fusion_output_dim):
+    def __init__(self, args):
         super(SumFusion, self).__init__()
-        self.fc_x = nn.Linear(input_dim, output_dim)
-        self.fc_y = nn.Linear(input_dim, output_dim)
+        self.fc_x = nn.Linear(args.fusion_input_dim, args.fusion_output_dim)
+        self.fc_y = nn.Linear(args.fusion_input_dim, args.fusion_output_dim)
 
     def forward(self, x, y):
         output = self.fc_x(x) + self.fc_y(y)
@@ -23,9 +17,9 @@ class SumFusion(nn.Module):
 
 
 class ConcatFusion(nn.Module):
-    def __init__(self, input_dim=args.fusion_input_dim * 2, output_dim=args.fusion_output_dim):
+    def __init__(self, args):
         super(ConcatFusion, self).__init__()
-        self.fc_out = nn.Linear(input_dim, output_dim)
+        self.fc_out = nn.Linear(args.fusion_input_dim, args.fusion_output_dim)
 
     def forward(self, x, y):
         output = torch.cat((x, y), dim=1)
@@ -39,8 +33,12 @@ class FiLM(nn.Module):
     https://arxiv.org/pdf/1709.07871.pdf.
     """
 
-    def __init__(self, input_dim=args.fusion_input_dim, dim=args.fusion_input_dim, output_dim=args.fusion_output_dim, x_film=args.film_x_film):
+    def __init__(self, args ):
         super(FiLM, self).__init__()
+        input_dim=args.fusion_input_dim
+        output_dim=args.fusion_output_dim
+        x_film=args.film_x_film
+        dim=args.fusion_input_dim
 
         self.dim = dim
         self.fc = nn.Linear(input_dim, 2 * dim)
@@ -69,8 +67,13 @@ class GatedFusion(nn.Module):
     https://arxiv.org/pdf/1802.02892.pdf.
     """
 
-    def __init__(self, input_dim=args.fusion_input_dim, dim=args.fusion_input_dim, output_dim=args.fusion_output_dim, x_gate=args.gated_x_gate):
+    def __init__(self, args):
         super(GatedFusion, self).__init__()
+
+        input_dim=args.fusion_input_dim
+        dim=args.fusion_input_dim
+        output_dim=args.fusion_output_dim
+        x_gate=args.gated_x_gate
 
         self.fc_x = nn.Linear(input_dim, dim)
         self.fc_y = nn.Linear(input_dim, dim)
@@ -94,7 +97,7 @@ class GatedFusion(nn.Module):
         return out_x, out_y, output
 
 # You can now select the fusion method from args.fusion_type
-def create_fusion_model():
+def create_fusion_model(args):
     fusion_type = args.fusion_type
 
     if fusion_type == 'sum':

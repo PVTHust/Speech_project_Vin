@@ -4,14 +4,12 @@ import yaml
 import numpy as np
 import argparse
 import matplotlib.pyplot as plt
-import os
-import sys
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from main import get_args
+
+
 from net.block_visual import BasicConv, Flatten, ChannelGate, ChannelPool, SpatialGate, CBAM, conv3x3, conv1x1, BasicBlock, MulScaleBlock, AttentionBlock
 
-args = get_args()
+
 # Define the MANet model
 class MANet(nn.Module):
 
@@ -118,7 +116,7 @@ class MANet(nn.Module):
         return self._forward_impl(x, return_embedding)
 
 
-def manet(**kwargs):
+def manet(args, **kwargs):
     # Use args instead of config
     return MANet(
         block_b=BasicBlock, 

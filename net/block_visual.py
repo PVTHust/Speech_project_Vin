@@ -5,11 +5,6 @@ import os
 import sys
 
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from main import get_args
-
-args = get_args()
-
 class BasicConv(nn.Module):
     def __init__(self, in_planes, out_planes, kernel_size, stride=1, padding=0, dilation=1, groups=1, relu=True, bn=True, bias=False):
         super(BasicConv, self).__init__()
@@ -33,8 +28,10 @@ class Flatten(nn.Module):
 
 
 class ChannelGate(nn.Module):
-    def __init__(self, gate_channels, reduction_ratio=args.reduction_ratio, pool_types=args.pool_types):
+    def __init__(self,args,  gate_channels):
         super(ChannelGate, self).__init__()
+        reduction_ratio=args.reduction_ratio
+        pool_types=args.pool_types
         self.gate_channels = gate_channels
         self.mlp = nn.Sequential(
             Flatten(),
@@ -91,8 +88,10 @@ def conv1x1(in_planes, out_planes, stride=1):
     return nn.Conv2d(in_planes, out_planes, kernel_size=1, stride=stride, bias=False)
 
 class CBAM(nn.Module):
-    def __init__(self, gate_channels, reduction_ratio=args.reduction_ratio , pool_types=args.pool_types):
+    def __init__(self,args, gate_channels):
         super(CBAM, self).__init__()
+        reduction_ratio=args.reduction_ratio
+        pool_types=args.pool_types
         self.ChannelGate = ChannelGate(gate_channels, reduction_ratio, pool_types)
         self.SpatialGate = SpatialGate()
 

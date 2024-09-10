@@ -18,11 +18,9 @@ class AVClassifier(nn.Module):
 
         # Select fusion module based on args
         if fusion_method == 'sum':
-            print('done')
             self.fusion_module = SumFusion(args)
             
         elif fusion_method == 'concat':
-            print(1)
             self.fusion_module = ConcatFusion(args)
         elif fusion_method == 'film':
             self.fusion_module = FiLM(args)
@@ -35,9 +33,9 @@ class AVClassifier(nn.Module):
         self.audio_net = ASTModel(args, input_tdim=256, label_dim=64, audioset_pretrain=False)
 
         # Load visual model (MANet)
-        visual_sd = torch.load(args.weight_visual, map_location='cuda')
+        # visual_sd = torch.load(args.weight_visual, map_location='cuda')
         visual_model = manet(args)
-        visual_model.load_state_dict(visual_sd, strict=False)
+        # visual_model.load_state_dict(visual_sd, strict=False)
         self.visual_net = visual_model
 
     def forward(self, audio, visual):
@@ -47,7 +45,7 @@ class AVClassifier(nn.Module):
 
         # Process visual input
         v = self.visual_net(visual, return_embedding=True)
-
+        print(1)
         # Fusion of audio and visual
         a, v, out = self.fusion_module(a, v)
 

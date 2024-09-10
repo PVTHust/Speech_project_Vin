@@ -88,11 +88,9 @@ def conv1x1(in_planes, out_planes, stride=1):
     return nn.Conv2d(in_planes, out_planes, kernel_size=1, stride=stride, bias=False)
 
 class CBAM(nn.Module):
-    def __init__(self,args, gate_channels):
+    def __init__(self, args, gate_channels):
         super(CBAM, self).__init__()
-        reduction_ratio=args.reduction_ratio
-        pool_types=args.pool_types
-        self.ChannelGate = ChannelGate(gate_channels, reduction_ratio, pool_types)
+        self.ChannelGate = ChannelGate(args, gate_channels)
         self.SpatialGate = SpatialGate()
 
     def forward(self, x):
@@ -237,7 +235,7 @@ class AttentionBlock(nn.Module):
         self.bn2 = norm_layer(planes)
         self.downsample = downsample
         self.stride = stride
-        self.cbam = CBAM(planes, 16)
+        self.cbam = CBAM(args, planes)
 
     def forward(self, x):
         identity = x

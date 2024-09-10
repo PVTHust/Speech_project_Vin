@@ -12,19 +12,19 @@ from sklearn.model_selection import train_test_split
 import torchaudio
 import sys
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from main import get_args
 
-args = get_args()
+
+
 
 class CramedDataset(Dataset):
 
-    def __init__(self, data, train=True):
+    def __init__(self, args,  data, train=True):
         self.image = []
         self.audio = []
         self.label = []
         self.train = train
         self.audio_length = 256
+
 
         class_dict = {'NEU': 0, 'HAP': 1, 'SAD': 2, 'FEA': 3, 'DIS': 4, 'ANG': 5}
 
@@ -41,6 +41,8 @@ class CramedDataset(Dataset):
                 self.label.append(class_dict[item[1]])
             else:
                 continue
+
+        self.args = args    
 
     def __len__(self):
         return len(self.image)
@@ -79,7 +81,7 @@ class CramedDataset(Dataset):
 
         # Visual
         image_samples = os.listdir(self.image[idx])
-        select_index = np.random.choice(len(image_samples), size=args.fps, replace=False)
+        select_index = np.random.choice(len(image_samples), size=self.args.fps, replace=False)
         select_index.sort()
 
         img = Image.open(os.path.join(self.image[idx], image_samples[select_index[0]])).convert('RGB')
@@ -103,12 +105,3 @@ def load_cremad(args):
 
     return train_dataset, dev_dataset, test_dataset
 
-# Load datasets
-train_dataset, dev_dataset, test_dataset = load_cremad(args)
-
-# Set up DataLoaders
-train_dataloader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, pin_memory=True)
-dev_dataloader = DataLoader(dev_dataset, batch_size=args.batch_size, shuffle=False, pin_memory=True)
-test_dataloader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, pin_memory=True)
-
-print('Train: {}, Dev: {}, Test: {}'.format(len(train_dataloader), len(dev_dataloader), len(test_dataloader)))

@@ -5,7 +5,7 @@ fps: 1
 num_classes: 7
 audio_path: '/kaggle/input/cremad-1/cremad/AudioWAV/'  # fix link dataset
 visual_path: '/kaggle/input/cremad-1/cremad/'  # fix link dataset
-batch_size: 32
+batch_size: 16
 epochs: 30
 optimizer: 'sgd'
 learning_rate: 0.0002

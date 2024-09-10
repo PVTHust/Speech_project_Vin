@@ -38,7 +38,7 @@ dev_dataloader = DataLoader(dev_dataset, batch_size=args.batch_size, shuffle=Fal
 test_dataloader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers)
 
 # define model
-audio_model = ASTModel(input_tdim=256,label_dim=64, audioset_pretrain=True)
+audio_model = ASTModel(input_tdim=256, label_dim=64, audioset_pretrain=False)
 audio_model = torch.nn.DataParallel(audio_model, device_ids=[0, 1])
 audio_model.to(device)
 
@@ -118,3 +118,5 @@ for epoch in range(args.epochs):
     if args.save_path:
         torch.save(audio_model.state_dict(), os.path.join(args.save_path, f"audio_model_epoch_{epoch}.pth"))
         print(f"Model weights saved to {args.save_path}")
+
+

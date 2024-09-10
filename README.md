@@ -13,3 +13,5 @@ This source code train with Kaggle using Pytorch version
 1. You need pip install timm version 0.4.5 for load Audio_Encoder
 2. Using config.yaml to fix the name folder dataset, weight load
 3. Run train_kaggle.inypb for training
+
+

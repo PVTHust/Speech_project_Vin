@@ -9,7 +9,7 @@ import yaml
 from torch import optim
 from sklearn.metrics import f1_score, classification_report
 from torch.utils.data import DataLoader
-from model.Ourmodel import AVClassifier  # Import your model
+from model.our_model import AVClassifier  # Import your model
 from dataset import CramedDataset  # Assuming you have a dataset class
 from model.fusion_method import ConcatFusion, SumFusion, FiLM, GatedFusion  # Import fusion methods
 

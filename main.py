@@ -79,8 +79,10 @@ def get_args():
     parser.add_argument('--training_epoch', type=int, default=100)
     parser.add_argument('--training_save_path', type=str, default='/kaggle/working/model.pth')
 
+    args = parser.parse_args()
 
-    return parser.parse_args()
+
+    return args
 
   
 if __name__ == "__main__":

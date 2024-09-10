@@ -14,9 +14,8 @@ def parse_args():
     parser.add_argument('--device', type=str, default='cuda' if torch.cuda.is_available() else 'cpu', help='Device to use')
     parser.add_argument('--save_path', type=str, default='/content/kaggle-working/', help='Path to save the model')
     args = parser.parse_args()
-    # Add more arguments here as needed
     return parser.parse_args()
 
 if __name__ == "__main__":
     args = parse_args()
-    print(args.learning_rate)
+    print(args.device)

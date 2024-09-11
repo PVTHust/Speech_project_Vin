@@ -28,10 +28,8 @@ class Flatten(nn.Module):
 
 
 class ChannelGate(nn.Module):
-    def __init__(self,args,  gate_channels):
+    def __init__(self, gate_channels, reduction_ratio =16, pool_types=['avg', 'max']):
         super(ChannelGate, self).__init__()
-        reduction_ratio=args.reduction_ratio
-        pool_types=args.pool_types
         self.gate_channels = gate_channels
         self.mlp = nn.Sequential(
             Flatten(),
@@ -88,9 +86,9 @@ def conv1x1(in_planes, out_planes, stride=1):
     return nn.Conv2d(in_planes, out_planes, kernel_size=1, stride=stride, bias=False)
 
 class CBAM(nn.Module):
-    def __init__(self, args, gate_channels):
+    def __init__(self, gate_channels, reduction_ratio=16, pool_types=['avg', 'max']):
         super(CBAM, self).__init__()
-        self.ChannelGate = ChannelGate(args, gate_channels)
+        self.ChannelGate = ChannelGate( gate_channels, reduction_ratio=reduction_ratio, pool_types=pool_types)
         self.SpatialGate = SpatialGate()
 
     def forward(self, x):
@@ -235,7 +233,7 @@ class AttentionBlock(nn.Module):
         self.bn2 = norm_layer(planes)
         self.downsample = downsample
         self.stride = stride
-        self.cbam = CBAM(args, planes)
+        self.cbam = CBAM(planes)
 
     def forward(self, x):
         identity = x

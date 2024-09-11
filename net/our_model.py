@@ -6,6 +6,9 @@ from net.fusion_method import ConcatFusion, SumFusion, FiLM, GatedFusion
 from net.AST import ASTModel
 from net.manet import manet, RecorderMeter
 
+# from fusion_method import ConcatFusion, SumFusion, FiLM, GatedFusion
+# from AST import ASTModel
+# from manet import manet, RecorderMeter
 
 
 
@@ -50,3 +53,4 @@ class AVClassifier(nn.Module):
         a, v, out = self.fusion_module(a, v)
 
         return a, v, out
+

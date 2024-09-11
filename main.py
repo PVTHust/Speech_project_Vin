@@ -94,3 +94,7 @@ if __name__ == "__main__":
     print(args.device)
     print(args.fusion_type)
     print('done')
+
+    from net.our_model import AVClassifier
+    model = AVClassifier(args)
+    print(model)

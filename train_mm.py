@@ -4,7 +4,7 @@ from torch import nn
 from tqdm import tqdm
 from sklearn.metrics import f1_score, classification_report
 
-def train_epoch(epoch, model, device, dataloader, optimizer, scheduler, writer=None):
+def train_epoch(epoch, model, dataloader, optimizer, scheduler,device, writer=None):
     criterion = nn.CrossEntropyLoss()
 
     model.train()
@@ -26,7 +26,7 @@ def train_epoch(epoch, model, device, dataloader, optimizer, scheduler, writer=N
         loss.backward()
 
         optimizer.step()
-        pbar.set_description('Epoch: {} Loss: {:.4f}'.format(epoch, loss.item()))
+        # pbar.set_description('Epoch: {} Loss: {:.4f}'.format(epoch, loss.item()))
 
         _loss += loss.item()
 

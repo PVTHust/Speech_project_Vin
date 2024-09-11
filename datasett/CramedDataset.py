@@ -2,7 +2,7 @@ import copy
 import csv
 import os
 import pickle
-import librosa
+import torchaudio
 import numpy as np
 from scipy import signal
 import torch
@@ -46,16 +46,21 @@ class CramedDataset(Dataset):
     def __getitem__(self, idx):
 
         # audio
-        samples, rate = librosa.load(self.audio[idx], sr=22050)
-        resamples = np.tile(samples, 3)[:22050*3]
-        resamples[resamples > 1.] = 1.
-        resamples[resamples < -1.] = -1.
+        waveform, sr = torchaudio.load(self.audio[idx])
+        fbank = torchaudio.compliance.kaldi.fbank(
+            waveform, htk_compat=True, sample_frequency=sr, use_energy=False,
+            window_type='hanning', num_mel_bins=128, dither=0.0, frame_shift=10
+        )
 
-        spectrogram = librosa.stft(resamples, n_fft=512, hop_length=353)
-        spectrogram = np.log(np.abs(spectrogram) + 1e-7)
-        #mean = np.mean(spectrogram)
-        #std = np.std(spectrogram)
-        #spectrogram = np.divide(spectrogram - mean, std + 1e-9)
+        n_frames = fbank.shape[0]
+        p = self.audio_length - n_frames
+        if p > 0:
+            m = torch.nn.ZeroPad2d((0, 0, 0, p))
+            fbank = m(fbank)
+        elif p < 0:
+            fbank = fbank[0:self.audio_length, :]
+
+        fbank = fbank.unsqueeze(0)
 
         if self.train:
             transform = transforms.Compose([
@@ -86,7 +91,7 @@ class CramedDataset(Dataset):
         # label
         label = self.label[idx]
 
-        return spectrogram, images, label
+        return fbank, images, label
 
 def load_cremad(args, data_root='./Speech_project_Vin/data/'):
     train_csv = os.path.join(data_root, args.dataset + '/train.csv')

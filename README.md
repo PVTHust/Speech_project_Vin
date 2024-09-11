@@ -20,15 +20,15 @@ git clone https://github.com/PVTHust/Speech_project_Vin.git
 ```
 - Download dataset: 
 ```bash
-!gdown 1CdjCD2amHDsjJFfb5OuTbIfwEikgn6u-
+gdown 1CdjCD2amHDsjJFfb5OuTbIfwEikgn6u-
 ```
 - Unzip dataset:    
 ```bash
-!unzip cremad.zip
+unzip cremad.zip
 ```
 -Train and evaluate our model:
 ```bash
-!python /content/Speech_project_Vin/main.py
+python /content/Speech_project_Vin/main.py
 ```
 
 

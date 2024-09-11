@@ -96,5 +96,23 @@ if __name__ == "__main__":
     print('done')
 
     from net.our_model import AVClassifier
+    from train_mm import train_epoch, eval
+    import os
     model = AVClassifier(args)
-    print(model)
+    device = torch.device(args.device)
+    model.to(device)
+
+    optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=args.lr_decay_step, gamma=args.lr_decay_ratio)
+
+    for epoch in range (args.epochs):
+        train_loss = train_epoch(args, epoch, model, device, optimizer, scheduler, save_path=args.save_path)
+        print(f"Epoch {epoch} - Train Loss: {train_loss}")
+
+        val_loss, wf1 = eval(args, model, device, save_path=args.save_path)
+        print(f"Epoch {epoch} - Dev Loss: {val_loss}, Dev F1: {wf1}")
+
+        if args.save_path:
+            torch.save(model.state_dict(), os.path.join(args.save_path, f"mm_model_epoch_{epoch}_{wf1}.pth"))
+            print(f"Model weights saved to {args.save_path}")
+    print('done')   

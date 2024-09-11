@@ -9,14 +9,8 @@ from dataset.CramedDataset import load_cremad
 from model.AST import ASTModel
 import sys
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from main import get_args
 
-args = get_args()
-
-
-
-def train_epoch_audio(model, dataloader, optimizer, scheduler, save_path=args.save_path):
+def train_epoch(model, dataloader, optimizer, scheduler, save_path=None):
     """
     Train the model for one epoch on the provided data.
     """
@@ -30,7 +24,7 @@ def train_epoch_audio(model, dataloader, optimizer, scheduler, save_path=args.sa
         label = label.to(device)
 
         optimizer.zero_grad()
-        out = model(spec.unsqueeze(1).float(), image.float())
+        a, v, out = model(spec.unsqueeze(1).float(), image.float())
         loss = criterion(out, label)
         loss.backward()
         optimizer.step()
@@ -63,7 +57,7 @@ def eval(model, dataloader, test=False):
             image = image.to(device)
             label = label.to(device)
 
-            out = model(spec.unsqueeze(1).float(), image.float())
+            a, v, out = model(spec.unsqueeze(1).float(), image.float())
             loss = criterion(out, label)
             _loss += loss.item()
 
@@ -78,23 +72,15 @@ def eval(model, dataloader, test=False):
 
     return _loss / len(dataloader), wf1
 
-device = torch.device(args.device)
-train_dataset, dev_dataset, test_dataset = load_cremad(args)
-train_dataloader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers)
-dev_dataloader = DataLoader(dev_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers)
-test_dataloader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers)
 
-# define model
-audio_model = ASTModel(input_tdim=256, label_dim=64, audioset_pretrain=False)
-audio_model = torch.nn.DataParallel(audio_model, device_ids=[0, 1])
-audio_model.to(device)
+
 
 
 optimizer = torch.optim.Adam(audio_model.parameters(), lr=args.lr)
 scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
 
 for epoch in range(args.epochs):
-    train_loss = train_epoch_audio(audio_model, train_dataloader, optimizer, scheduler, save_path=args.save_path)
+    train_loss = train_epoch(model, train_dataloader, optimizer, scheduler, save_path=args.save_path)
     print(f"Epoch {epoch} - Train Loss: {train_loss}")
 
     val_loss, wf1 = eval(audio_model, dev_dataloader)

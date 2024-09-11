@@ -22,6 +22,7 @@ class CramedDataset(Dataset):
         self.audio = []
         self.label = []
         self.train = train
+        self.audio_length = 256
 
         class_dict = {'NEU':0, 'HAP':1, 'SAD':2, 'FEA':3, 'DIS':4, 'ANG':5}
 

@@ -5,7 +5,7 @@ import sys
 from net.fusion_method import ConcatFusion, SumFusion, FiLM, GatedFusion
 from net.AST import ASTModel
 from net.manet import manet, RecorderMeter
-
+from net.MMT import MMTFusion
 # from fusion_method import ConcatFusion, SumFusion, FiLM, GatedFusion
 # from AST import ASTModel
 # from manet import manet, RecorderMeter
@@ -29,6 +29,8 @@ class AVClassifier(nn.Module):
             self.fusion_module = FiLM(args)
         elif fusion_method == 'gated':
             self.fusion_module = GatedFusion(args)
+        elif fusion_method == 'mmt':
+            Select.fusion_module = MMTFusion()
         else:
             raise ValueError("Invalid fusion method in args")
 

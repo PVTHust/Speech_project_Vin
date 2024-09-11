@@ -77,6 +77,7 @@ def get_args(args=None):
     parser.add_argument('--training_lr_decay_ratio', type=float, default=0.1)
     parser.add_argument('--training_epoch', type=int, default=100)
     parser.add_argument('--training_save_path', type=str, default='./model.pth')
+    parser.add_argument('--train_audio_model', type=bool, default=False)
 
     if args is None:
         args = parser.parse_args()
@@ -130,4 +131,41 @@ if __name__ == "__main__":
             torch.save(model.state_dict(), os.path.join(args.save_path, f"mm_model_epoch_{epoch}_{wf1}.pth"))
             print(f"Model weights saved to {args.save_path}")
     print('done')
+
+    if args.train_audio_model:
+        from datasett.CramedDataset_audio import load_cremad
+        from train_audio import train_epoch_audio, eval
+        from net.AST import ASTModel
+        input_tdim = 256
+        model  = ASTModel(args, input_tdim=input_tdim, label_dim=64, audioset_pretrain=False)
+        device = torch.device(args.device)
+        model.to(device)
+
+        train_dataset, dev_dataset, test_dataset = load_cremad(args, data_root='./Speech_project_Vin/data/')
+
+        train_dataloader = DataLoader(train_dataset, batch_size=args.batch_size,
+                                shuffle=True, pin_memory=True)
+
+        dev_dataloader = DataLoader(dev_dataset, batch_size=args.batch_size,
+                              shuffle=False, pin_memory=True)
+
+        test_dataloader = DataLoader(test_dataset, batch_size=args.batch_size,
+                                shuffle=False, pin_memory=True)
+
+        print('Train: {}, Dev: {}, Test: {}'.format(len(train_dataloader), len(dev_dataloader), len(test_dataloader)))
+
+        optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
+        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=args.lr_decay_step, gamma=args.lr_decay_ratio)
+
+        for epoch in range (args.epochs):
+            train_loss = train_epoch_audio(epoch, model, train_dataloader, optimizer, scheduler,device = args.device)
+            print(f"Epoch {epoch} - Train Loss: {train_loss}")
+
+            val_loss, wf1 = eval(args, model, device, dev_dataloader, test=False)
+            print(f"Epoch {epoch} - Dev Loss: {val_loss}, Dev F1: {wf1}")
+
+            if args.save_path:
+                torch.save(model.state_dict(), os.path.join(args.save_path, f"audio_model_epoch_{epoch}_{wf1}.pth"))
+                print(f"Model weights saved to {args.save_path}")
+
 

@@ -28,7 +28,7 @@ gdown 1CdjCD2amHDsjJFfb5OuTbIfwEikgn6u-
 ```bash
 unzip cremad.zip
 ```
--Train and evaluate our model:
+- Train and evaluate our model:
 ```bash
 python /content/Speech_project_Vin/main.py
 ```

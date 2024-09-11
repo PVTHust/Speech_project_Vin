@@ -1,8 +1,11 @@
+# Multi-modal Emotion Recognition Classification
+## Prerequisites
+- Python 3
+- Linux
+- Pytorch 0.4+
+- GPU + CUDA CuDNN
 ## Dataset
 [CREMA-D](https://www.kaggle.com/datasets/phmvittin/cremad-1)
----
-**NOTE**
----
 ## Pretrained Weight for Multimodal
 1. [Audio_Encoder](https://www.kaggle.com/datasets/phmvittin/weight-asr)
 2. [Visual_Encoder](https://www.kaggle.com/datasets/phmvittin/weight-cremad)
@@ -12,7 +15,6 @@
 1. You need pip install timm version 0.4.5 for load Audio_Encoder
 2. Using config.yaml to fix the name folder dataset, weight load
 3. Run train_kaggle.inypb for training -->
-
 ## Getting Started
 - Installation
 ``` bash

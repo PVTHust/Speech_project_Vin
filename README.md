@@ -33,4 +33,8 @@ unzip cremad.zip
 python /content/Speech_project_Vin/main.py
 ```
 
-
+Or if you use Kaggle/Jupyter notebook you can run:
+```bash
+train_kaggle.inypb
+```
+and fix dataset path on config.yaml

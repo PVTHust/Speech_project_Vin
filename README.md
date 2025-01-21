@@ -37,4 +37,4 @@ Or if you use Kaggle/Jupyter notebook you can run:
 ```bash
 train-kaggle.ipynb
 ```
-and fix dataset path on config.yaml
+and change the dataset's path on config.yaml
